@@ -2,10 +2,9 @@ import os
 import datetime
 import pandas as pd
 
-all_reports = os.listdir('reports/')
-df = pd.DataFrame()
-
 log_files_path = 'D:/Abacus/abac/log/abaengine/long_running_reports/'
+all_reports = os.listdir(log_files_path)
+df = pd.DataFrame()
 
 for report in all_reports:
     file = log_files_path + report
