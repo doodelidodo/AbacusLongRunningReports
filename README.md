@@ -9,6 +9,8 @@ Dieses Script exportiert ein Excel mit den wichtigsten Infos aus den Logs:
 - Reportname und den Pfad zum Report
 - Ob der Report auch vollständig geladen wurde
 - Anzahl finds die auf der DB abgesetzt wurden
+- Anzahl rows
+- Prozent welche durch Kriterien gefiltert werden
 - Zeit die der Report benötigt hat, um die Daten zu laden
 
 Wenn der Report nicht durchgelaufen ist, bekommt das Attribut done den Wert 0. Zudem werden dann die Attribute run und finds nicht abgefüllt.

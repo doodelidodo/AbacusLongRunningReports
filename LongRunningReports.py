@@ -26,18 +26,28 @@ for report in all_reports:
         try: 
             if type == 'run':
                 return digit_lines_last.split(': done')[0]
-            else:
+            if type == 'rows':
+                return int(digit_lines_last.split('(')[1].split(',')[1].split(' = ')[1].replace('\'', ''))
+            if type == 'criteria':
+                return digit_lines_last.split('(')[1].split(',')[3].split(' = ')[1][:-1]
+            if type == 'finds':
                 return int(digit_lines_last.split('(')[1].split(',')[2].split(' = ')[1].replace('\'', ''))
+            else:
+                return ''
         except:
             return ""
 
     done = 0
     run = ''
     finds = ''
+    rows = ''
+    criteria = ''
     if 'done =>' in digit_lines_last:
         done = 1
         run = find_key_word('run')
         finds = find_key_word('finds')
+        rows = find_key_word('rows')
+        criteria = find_key_word('criteria')
         
 
     user = content[0][:-1]
@@ -47,9 +57,10 @@ for report in all_reports:
         report_path =  [i for i in content_lines if "[D:" in i][0].split('[')[1][:-1]
     except:
         ""
+        
     creation_timestamp = os.path.getmtime(file)
     creation_date_time= datetime.datetime.fromtimestamp(creation_timestamp)
-    new_entry = {'ErstellungsDatum': [creation_date_time], 'User': [user], 'Report': report_name, 'ReportPfad': [report_path], 'done': done, 'Finds': [finds], 'Run': [run]}
+    new_entry = {'ErstellungsDatum': [creation_date_time], 'User': [user], 'Report': report_name, 'ReportPfad': [report_path], 'done': done, 'Finds': [finds], 'Rows': [rows], 'Kriterien': [criteria], 'Run': [run]}
     df_new_entry = pd.DataFrame(new_entry)
     df = pd.concat([df, df_new_entry])
 
