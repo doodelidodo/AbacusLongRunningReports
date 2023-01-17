@@ -1,4 +1,4 @@
-# AbacusLongRunningReports
+# Abacus Long Running Reports
  Log Analyse von Long running Reports im Abacus
 
 Wenn ein Report im Abacus länger läuft als er sollte, wird er im Abacus als long running report gelogged. Diese Logs liegen im folgenden Ordner: abac\log\abaengine\long_running_reports
