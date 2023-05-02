@@ -117,3 +117,5 @@ reports/
 output/
 longRunningReportsAnalsyse.xlsx
 
+
+*.sqlite

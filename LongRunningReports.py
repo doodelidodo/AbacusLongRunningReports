@@ -1,9 +1,17 @@
 import os
 import datetime
 import pandas as pd
+import sqlite3 as s3
 
+# log_files_path = 'C:/Users/medo/Documents/coding/LongRunningReports/AbacusLongRunningReports/reports/'
 log_files_path = 'D:/Abacus/abac/log/abaengine/long_running_reports/'
-all_reports = os.listdir(log_files_path)
+
+db_path = r"D:\Abacus\LongRuningReports\LongRuningReports.sqlite"
+conn = s3.connect(db_path)
+
+today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+all_reports = [f for f in os.listdir(log_files_path) if os.path.isfile(os.path.join(log_files_path, f)) and datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(log_files_path, f))).strftime('%Y-%m-%d') == today_date]
+
 df = pd.DataFrame()
 
 for report in all_reports:
@@ -42,6 +50,7 @@ for report in all_reports:
     finds = ''
     rows = ''
     criteria = ''
+
     if 'done =>' in digit_lines_last:
         done = 1
         run = find_key_word('run')
@@ -60,9 +69,26 @@ for report in all_reports:
         
     creation_timestamp = os.path.getmtime(file)
     creation_date_time= datetime.datetime.fromtimestamp(creation_timestamp)
-    new_entry = {'ErstellungsDatum': [creation_date_time], 'User': [user], 'Report': report_name, 'ReportPfad': [report_path], 'done': done, 'Finds': [finds], 'Rows': [rows], 'Kriterien': [criteria], 'Run': [run]}
+    new_entry = {
+        'TimeStamp': [creation_date_time], 
+        'User': [user], 
+        'Report': report_name, 
+        'ReportPfad': [report_path], 
+        'done': done, 
+        'Finds': [finds], 
+        'Rows': [rows], 
+        'Kriterien': [criteria], 
+        'Run': [run]
+        }
     df_new_entry = pd.DataFrame(new_entry)
     df = pd.concat([df, df_new_entry])
 
-file_name =  "longRunningReportsAnalsyse.xlsx"
-df.to_excel(file_name, index=False, engine="xlsxwriter")
+df = df[~df['ReportPfad'].str.endswith('preview1.avx')]
+df['ReportTyp'] = df['ReportPfad'].str.rsplit('.', 1).str[-1]
+
+if not df.empty:
+    df.to_sql("LongRuningReports", con=conn, if_exists='append', index=False, chunksize=1000)
+    conn.close()
+else:
+    print('dataframe is empty')
+    conn.close()
