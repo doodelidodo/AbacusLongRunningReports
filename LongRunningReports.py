@@ -3,10 +3,11 @@ import datetime
 import pandas as pd
 import sqlite3 as s3
 
-# log_files_path = 'C:/Users/medo/Documents/coding/LongRunningReports/AbacusLongRunningReports/reports/'
-log_files_path = 'D:/Abacus/abac/log/abaengine/long_running_reports/'
+log_files_path = 'C:/Users/medo/Documents/coding/LongRunningReports/AbacusLongRunningReports/reports/'
+#log_files_path = 'D:/Abacus/abac/log/abaengine/long_running_reports/'
 
-db_path = r"D:\Abacus\LongRuningReports\LongRuningReports.sqlite"
+# D:\Abacus\LongRuningReports\LongRuningReports.sqlite
+db_path = r"LongRuningReports.sqlite"
 conn = s3.connect(db_path)
 
 today_date = datetime.datetime.today().strftime('%Y-%m-%d')
