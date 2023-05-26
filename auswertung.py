@@ -2,6 +2,7 @@ import pandas as pd
 import sqlite3
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_pdf
+from matplotlib import table
 import datetime
 
 # db_path = f'LongRuningReports.sqlite'
@@ -21,6 +22,9 @@ current_timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 # Name des PDF-Dateinamens mit Zeitstempel
 pdf_filename = f"D:/Abacus/LongRuningReports/Auswertung/LongRunningReports_{current_timestamp}.pdf"
 # pdf_filename = f'C:/Users/medo/Documents/coding/LongRunningReports/AbacusLongRunningReports/Auswertung/LongRunningReports_{current_timestamp}.pdf'
+
+excel_filename = f"D:/Abacus/LongRuningReports/Auswertung/LongRunningReports_{current_timestamp}.xlsx"
+# excel_filename = f'C:/Users/medo/Documents/coding/LongRunningReports/AbacusLongRunningReports/Auswertung/LongRunningReports_{current_timestamp}.xlsx'
 
 # Zeitstempel-String der letzten 2 Wochen berechnen
 two_weeks_ago = current_date - datetime.timedelta(weeks=2)
@@ -65,3 +69,11 @@ plt.ylabel('Durchschnittliche Laufzeit (Run)')
 plt.title('Top 20 Reports mit der längsten durchschnittlichen Laufzeit')
 plt.tight_layout()
 plt.savefig(pdf_filename, format='pdf')
+
+
+
+filtered_original_df = filtered_df[filtered_df['Report'].isin(top_10_reports.index)]
+filtered_original_df.sort_values(by=['Report', 'Run'], inplace=True)
+
+# Speichern des gefilterten DataFrames als Excel-Datei
+filtered_original_df.to_excel(excel_filename, index=False, engine='openpyxl')
